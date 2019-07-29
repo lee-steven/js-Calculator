@@ -25,8 +25,11 @@ html{
     text-align: right;
     padding: 30px 30px 10px 10px;
     margin-top: 10px;
+    margin-left: 20px;
     overflow: hidden;
+    direction: rtl;
 }
+
 
 .main-calc button{
     border: none;
