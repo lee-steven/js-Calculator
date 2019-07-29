@@ -1,1 +1,22 @@
-document.getElementById('output').innerHTML = '<p>0</p>';
+function add(a, b){
+    return a + b;
+}
+
+function subtract(a, b){
+    return a - b;
+}
+
+function multiply(a, b){
+    return a*b;
+}
+
+function divide(a,b){
+    return a / b;
+}
+
+
+var btn = document.querySelectorAll('button');
+for(let i = 0; i < btn.length; i++){
+    btn[i].addEventListener('click', () =>
+    alert("hello " + btn[i].value)
+)};
