@@ -1,23 +1,21 @@
-var input1 = '';
-var input2 = '';
-var operand = '';
-
+let input1 = '';
+let input2 = '';
+let operand1 = '';
+let operand2 = '';
+let output = document.getElementById('output');
 
 //STORING AND OUTPUT SCREEN
-var btn = document.querySelectorAll('button');
+var btn = document.querySelectorAll('.num');
 for(let i = 0; i < btn.length; i++){
     btn[i].addEventListener('click', () => {
         if(!input1){
-            input1 = document.getElementById('output').textContent += btn[i].value;
+            output.textContent += btn[i].value;
         }
-        else{
-            if(document.getElementById('output').textContent == '/' ||
-                document.getElementById('output').textContent == 'x' ||
-                document.getElementById('output').textContent == '-' ||
-                document.getElementById('output').textContent == '+'){
-                    document.getElementById('output').textContent = '';
+        else if(!input2){
+            if(output.textContent == input1){
+                output.textContent = '';
             }
-            input2 = document.getElementById('output').textContent += btn[i].value;
+            output.textContent += btn[i].value;
         }
     }
 )}
@@ -26,29 +24,63 @@ for(let i = 0; i < btn.length; i++){
 var operandbtn = document.querySelectorAll('.operand');
 for(let i = 0; i<operandbtn.length; i++){
     operandbtn[i].addEventListener('click', () => {
-        if(input1){
-            document.getElementById('output').textContent = '';
-            document.getElementById('output').textContent = operandbtn[i].textContent;
-            operand = operandbtn[i].textContent;
+
+
+        if(!input1){
+            input1 = output.textContent;
+            operand1 = operandbtn[i].textContent;
         }
+
+        else if(!input2){
+            input2 = output.textContent;
+            if(!operand1){
+                operand1 = operandbtn[i].textContent;
+            } else{
+                operand2 = operandbtn[i].textContent;
+            }
+        }
+
+
+        if(operand1 && input1 && input2){
+            let newInput = operation(operand1, input1, input2);
+            operand1 = operand2; 
+            input1 = newInput;
+            input2 = '';
+            output.textContent = input1; 
+        }
+
     })
 }
 
 //EQUALS
 var equalsbtn = document.getElementById('equals');
 equalsbtn.addEventListener('click', ()=> {
-    if(input1 && input2 && operand){
-        document.getElementById('output').textContent = '';
-        document.getElementById('output').textContent = operation(operand,input1, input2);
-    }
+    
+        if(!input2){
+            input2 = output.textContent;
+        }
+        console.log("EQUAL Press");
+        console.log("Input1: " + input1);
+        console.log("Input2: " + input2);
+        console.log("Operand: " + operand1);
+        if(input1 && input2 && operand1){
+            output.textContent = '';
+
+            output.textContent = operation(operand1,input1, input2);
+            input1 = output.textContent;
+            input2 = '' ;
+            operand1 = '';
+            operand2 = '';
+        }
 });
 
 //CLEAR 
 var clearbtn = document.getElementById('clear-calc');
 clearbtn.addEventListener('click', () => {
-    document.getElementById('output').textContent = ''
+    output.textContent = ''
     input1 = '';
     input2 = '';
+    operand = ''; 
 });
 
 function operation(operand, input1, input2){
