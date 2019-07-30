@@ -1,5 +1,6 @@
 let input1 = '';
 let input2 = '';
+let equalInput = '';
 let operand1 = '';
 let operand2 = '';
 let output = document.getElementById('output');
@@ -7,6 +8,7 @@ let output = document.getElementById('output');
 //STORING AND OUTPUT SCREEN
 var btn = document.querySelectorAll('.num');
 for(let i = 0; i < btn.length; i++){
+
     btn[i].addEventListener('click', () => {
         if(!input1){
             output.textContent += btn[i].value;
@@ -25,12 +27,11 @@ var operandbtn = document.querySelectorAll('.operand');
 for(let i = 0; i<operandbtn.length; i++){
     operandbtn[i].addEventListener('click', () => {
 
-
         if(!input1){
             input1 = output.textContent;
             operand1 = operandbtn[i].textContent;
-        }
 
+        }
         else if(!input2){
             input2 = output.textContent;
             if(!operand1){
@@ -38,10 +39,12 @@ for(let i = 0; i<operandbtn.length; i++){
             } else{
                 operand2 = operandbtn[i].textContent;
             }
+
         }
 
-
         if(operand1 && input1 && input2){
+            console.log("INPUT1: " + input1);
+            console.log("INPUT2: " + input2);
             let newInput = operation(operand1, input1, input2);
             operand1 = operand2; 
             input1 = newInput;
@@ -59,19 +62,18 @@ equalsbtn.addEventListener('click', ()=> {
         if(!input2){
             input2 = output.textContent;
         }
-        console.log("EQUAL Press");
-        console.log("Input1: " + input1);
-        console.log("Input2: " + input2);
-        console.log("Operand: " + operand1);
+
         if(input1 && input2 && operand1){
             output.textContent = '';
 
             output.textContent = operation(operand1,input1, input2);
-            input1 = output.textContent;
+            equalInput = output.textContent;
+            input1 = '';
             input2 = '' ;
             operand1 = '';
             operand2 = '';
         }
+
 });
 
 //CLEAR 
