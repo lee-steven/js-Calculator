@@ -1,6 +1,7 @@
 let input1 = '';
 let input2 = '';
-let equalInput = '';
+let previousKeyOperator = false;
+// let equalInput = '';
 let operand1 = '';
 let operand2 = '';
 let output = document.getElementById('output');
@@ -10,16 +11,14 @@ var btn = document.querySelectorAll('.num');
 for(let i = 0; i < btn.length; i++){
 
     btn[i].addEventListener('click', () => {
+
+        if(previousKeyOperator === true){
+            output.textContent = btn[i].value;
+            previousKeyOperator = false;
+        } else{
+            output.textContent += btn[i].value;
+        }
         
-        if(!input1){
-            output.textContent += btn[i].value;
-        }
-        else if(!input2){
-            if(output.textContent === input1){
-                output.textContent = '';
-            }
-            output.textContent += btn[i].value;
-        }
     }
 )}
 
@@ -28,50 +27,36 @@ var operandbtn = document.querySelectorAll('.operand');
 for(let i = 0; i<operandbtn.length; i++){
     operandbtn[i].addEventListener('click', () => {
 
-        if(!input1){
+        //if operand1 is empty and input1 is filled
+        if(!operand1 && input1){
+            operand1 = operandbtn[i].textContent; 
+            previousKeyOperator = true;
+        } else if(input1){
+            input2 = output.textContent;
+            operand2 = operandbtn[i].textContent;
+            let calculation = operation(operand1, input1, input2);
+            output.textContent = calculation;
+            input1 = calculation; 
+            operand1 = operand2; 
+            previousKeyOperator = true;
+        } else{
             input1 = output.textContent;
             operand1 = operandbtn[i].textContent;
+            previousKeyOperator = true;
         }
-
-        else if(!input2){
-            input2 = output.textContent;
-            if(!operand1){
-                operand1 = operandbtn[i].textContent;
-            } else{
-                operand2 = operandbtn[i].textContent;
-            }
-        }
-    
-        if(operand1 && input1 && input2){
-            let newInput = operation(operand1, input1, input2);
-            operand1 = operand2; 
-            input1 = newInput;
-            input2 = '';
-            output.textContent = input1; 
-        }
-
     })
 }
 
 //EQUALS
 var equalsbtn = document.getElementById('equals');
 equalsbtn.addEventListener('click', ()=> {
-    
-        if(!input2){
-            input2 = output.textContent;
-        }
 
-        if(input1 && input2 && operand1){
-            output.textContent = '';
-
-            output.textContent = operation(operand1,input1, input2);
-            equalInput = output.textContent;
-            input1 = '';
-            input2 = '' ;
-            operand1 = '';
-            operand2 = '';
-        }
-
+        input2 = output.textContent;
+        let calculation = operation(operand1, input1, input2);
+        operand1 = '';
+        output.textContent = calculation;
+        input1 = calculation; 
+        previousKeyOperator = true;
 });
 
 //CLEAR 
