@@ -11,26 +11,50 @@ var btn = document.querySelectorAll('.num');
 for(let i = 0; i < btn.length; i++){
 
     btn[i].addEventListener('click', () => {
+        let displayNum = output.textContent;
 
+
+        
         if(previousKeyOperator === true){
             output.textContent = btn[i].value;
+            document.getElementById('period').disabled = false;
             previousKeyOperator = false;
         } else{
             output.textContent += btn[i].value;
         }
-        
+
+        let countOfDecimals = (output.textContent.match(/[.]/g) || []).length;
+        if(countOfDecimals === 1){
+            document.getElementById('period').disabled = true;
+        }
     }
 )}
+
+var typedContent = document.getElementById('output');
+typedContent.contentEditable = true;
+typedContent.addEventListener("keypress", () => {
+    // if ((event.keyCode >= 48 && event.keyCode <= 57) || event.keyCode === 13) {
+    //     return true;
+    //   } else {
+    //     event.preventDefault();
+    //   }
+});
+
 
 //OPERANDS
 var operandbtn = document.querySelectorAll('.operand');
 for(let i = 0; i<operandbtn.length; i++){
     operandbtn[i].addEventListener('click', () => {
 
-        //if operand1 is empty and input1 is filled
-        if(!operand1 && input1){
+        //Preventing multiple operand clicks
+        if(previousKeyOperator === true){
+            operand1 = operandbtn[i].textContent;
+        }
+        //Conditional for AFTER equal sign is clicked
+        else if(!operand1 && input1){
             operand1 = operandbtn[i].textContent; 
             previousKeyOperator = true;
+
         } else if(input1){
             input2 = output.textContent;
             operand2 = operandbtn[i].textContent;
@@ -50,13 +74,26 @@ for(let i = 0; i<operandbtn.length; i++){
 //EQUALS
 var equalsbtn = document.getElementById('equals');
 equalsbtn.addEventListener('click', ()=> {
-
+    if(input1 && operand1){
         input2 = output.textContent;
         let calculation = operation(operand1, input1, input2);
         operand1 = '';
         output.textContent = calculation;
         input1 = calculation; 
         previousKeyOperator = true;
+    }
+});
+
+//BACKSPACE
+var backspace = document.getElementById('backspace');
+backspace.addEventListener('click', ()=> {
+    let displayVal = output.textContent;
+    if(output.textContent.length >  0){
+        let split = displayVal.split("");
+        split.pop();
+        let join = split.join("");
+        output.textContent = join;
+    }
 });
 
 //CLEAR 
@@ -83,22 +120,9 @@ function operation(operand, input1, input2){
         case '+':
             calculation = Number(input1) + Number(input2);
             break;
+        case '%':
+            calculation = Number(input1) % Number(input2);
+            break;
     }
     return calculation;
-}
-
-function add(a, b){
-    return a + b;
-}
-
-function subtract(a, b){
-    return a - b;
-}
-
-function multiply(a, b){
-    return a*b;
-}
-
-function divide(a,b){
-    return a / b;
 }
